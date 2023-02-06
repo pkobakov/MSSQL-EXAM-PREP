@@ -63,3 +63,10 @@ INSERT INTO Spaceships(Name, Manufacturer, LightSpeedRate) VALUES
 ('WakaWaka', 'Wakanda', 4),
 ('Falcon9', 'SpaceX', 1),
 ('Bed', 'Vidolov', 6)
+
+
+-- 3. UPDATE
+
+UPDATE Spaceships
+SET LightSpeedRate += 1
+WHERE Id BETWEEN 8 AND 12
