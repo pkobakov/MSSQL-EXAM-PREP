@@ -142,21 +142,35 @@
 
 --11. Get Colonists Count
 
-CREATE FUNCTION udf_GetColonistsCount(@PlanetName VARCHAR (30)) 
-RETURNS INT
-       AS
-	   BEGIN 
-	   RETURN (SELECT COUNT(p.Id) FROM TravelCards AS tc
-	   JOIN Journeys AS j
-	   ON tc.JourneyId = j.Id
-	   JOIN Spaceports AS sp
-	   ON j.DestinationSpaceportId = sp.Id
-	   JOIN Planets AS p
-	   ON sp.PlanetId = p.Id
+--CREATE FUNCTION udf_GetColonistsCount(@PlanetName VARCHAR (30)) 
+--RETURNS INT
+--       AS
+--	   BEGIN 
+--	   RETURN (SELECT COUNT(p.Id) FROM TravelCards AS tc
+--	   JOIN Journeys AS j
+--	   ON tc.JourneyId = j.Id
+--	   JOIN Spaceports AS sp
+--	   ON j.DestinationSpaceportId = sp.Id
+--	   JOIN Planets AS p
+--	   ON sp.PlanetId = p.Id
 
-	   WHERE p.Name LIKE @PlanetName)
-	   END
+--	   WHERE p.Name LIKE @PlanetName)
+--	   END
 
+--12. Change Journey Purpose
+CREATE PROCEDURE usp_ChangeJourneyPurpose(@JourneyId INT, @NewPurpose VARCHAR(11))
+            AS
+         BEGIN
+              IF (@JourneyId NOT IN (SELECT Id FROM Journeys))
+              THROW 50001, 'The journey does not exist!',1
+              IF ((SELECT COUNT(*) FROM Journeys WHERE Id = @JourneyId AND Purpose = @NewPurpose) != 0)
+                   THROW 50002,'You cannot change the purpose!',1
+
+                  UPDATE Journeys
+                     SET Purpose = @NewPurpose
+                   WHERE Id = @JourneyId
+               END
+		   END
 
 
 
