@@ -1,4 +1,4 @@
-
+CREATE DATABASE ColonialJourney
 -- DATABASE DESIGN
 
 CREATE TABLE Planets
@@ -65,8 +65,10 @@ INSERT INTO Spaceships(Name, Manufacturer, LightSpeedRate) VALUES
 ('Bed', 'Vidolov', 6)
 
 
--- 3. UPDATE
+-- 3.UPDATE
 
 UPDATE Spaceships
 SET LightSpeedRate += 1
 WHERE Id BETWEEN 8 AND 12
+
+
