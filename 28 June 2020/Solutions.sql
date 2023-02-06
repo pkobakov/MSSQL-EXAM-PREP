@@ -104,4 +104,21 @@ WHERE j.Purpose  LIKE 'Technical'
 GROUP BY j.Purpose 
 
 
+-- 8. Select spaceships with pilots younger than 30 years
+
+
+SELECT 
+s.Name,
+s.Manufacturer FROM Spaceships AS s
+JOIN Journeys AS j
+ON s.Id = j.SpaceshipId
+JOIN TravelCards AS tc
+ON j.Id = tc.JourneyId AND tc.JobDuringJourney = 'Pilot'
+JOIN Colonists AS c
+ON tc.ColonistId = c.Id
+WHERE DATEDIFF(YEAR, c.BirthDate, '01/01/2019') < 30
+ORDER BY s.Name 
+
+
+
 
