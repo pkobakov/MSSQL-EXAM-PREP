@@ -77,3 +77,10 @@ DELETE FROM TravelCards
 WHERE JourneyId IN (1,2,3)
 DELETE FROM Journeys
 WHERE Id IN(1,2,3)
+
+-- Select Military journeys
+
+SELECT Id, FORMAT(JourneyStart, 'dd/MM/yyyy') AS JourneyStart, FORMAT(JourneyEnd, 'dd/MM/yyyy') JourneyEnd  FROM Journeys
+WHERE Purpose LIKE 'Military'
+ORDER BY JourneyStart
+
