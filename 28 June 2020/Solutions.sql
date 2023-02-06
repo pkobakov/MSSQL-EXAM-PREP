@@ -93,3 +93,15 @@ WHERE tc.JobDuringJourney LIKE 'Pilot'
 ORDER BY c.Id
 
 
+-- 7.Count Colonists
+
+SELECT COUNT(c.Id) AS [count] FROM Colonists AS c
+JOIN TravelCards AS tc
+ON c.Id = tc.ColonistId
+JOIN Journeys AS j
+ON tc.JourneyId = j.Id
+WHERE j.Purpose  LIKE 'Technical'
+GROUP BY j.Purpose 
+
+
+
