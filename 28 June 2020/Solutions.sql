@@ -119,6 +119,15 @@ ON tc.ColonistId = c.Id
 WHERE DATEDIFF(YEAR, c.BirthDate, '01/01/2019') < 30
 ORDER BY s.Name 
 
+-- 9. Select all planets and their journey count
+
+SELECT p.Name AS PlanetName, COUNT(j.Id) AS JourneysCount  FROM Journeys AS j
+JOIN Spaceports AS sp
+ON j.DestinationSpaceportId = sp.Id
+JOIN Planets AS p
+ON sp.PlanetId = p.Id
+GROUP BY p.Name
+ORDER BY COUNT(j.Id) DESC, p.Name
 
 
 
