@@ -162,7 +162,22 @@ GROUP BY SUBSTRING(t.Name,CHARINDEX(' ', t.Name), LEN(t.Name)), t.Nationality, t
 ORDER BY SUBSTRING(t.Name,CHARINDEX(' ', t.Name), LEN(t.Name)) 
 
 
+-- Tourists Count on a Tourist Site
 
+CREATE FUNCTION udf_GetTouristsCountOnATouristSite (@Site VARCHAR(100))
+RETURNS INT 
+         AS
+         BEGIN
+		     DECLARE @TouristsCount INT =
+			 (SELECT COUNT(t.Id) FROM Tourists AS t
+			  JOIN SitesTourists AS st 
+			  ON t.Id = st.TouristId
+			  JOIN Sites AS s 
+			  ON st.SiteId = s.Id
+			  WHERE s.Name LIKE @Site)
+
+             RETURN @TouristsCount
+         END
 
 
 
