@@ -124,6 +124,18 @@ ON a.Id = ac.AnimalId
 WHERE t.Id = 1
 ORDER BY o.Name, a.Name DESC
 
+-- 9. Volunteers in Sofia
+
+SELECT v.Name, v.PhoneNumber, SUBSTRING(Address, CHARINDEX(',', Address) + 2, LEN(Address)) FROM Volunteers AS v
+JOIN VolunteersDepartments AS vc
+ON v.DepartmentId = vc.Id
+WHERE vc.Id = 2 AND v.Address LIKE '%Sofia%'
+ORDER BY v.Name
+
+
+SELECT Address FROM Volunteers
+
+
 
 
 
