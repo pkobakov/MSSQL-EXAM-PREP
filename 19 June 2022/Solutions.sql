@@ -143,17 +143,39 @@
 
 -- 11. All Vounteers in a Department
 
-CREATE FUNCTION udf_GetVolunteersCountFromADepartment (@VolunteersDepartment VARCHAR(30))
-             RETURNS INT
-			 AS
-			 BEGIN
-			     RETURN (SELECT COUNT(v.Id) FROM Volunteers AS v
-				 JOIN VolunteersDepartments AS vd
-				 ON v.DepartmentId = vd.Id
-				 WHERE vd.DepartmentName = @VolunteersDepartment)
-			 END
+--CREATE FUNCTION udf_GetVolunteersCountFromADepartment (@VolunteersDepartment VARCHAR(30))
+--             RETURNS INT
+--			 AS
+--			 BEGIN
+--			     RETURN (SELECT COUNT(v.Id) FROM Volunteers AS v
+--				 JOIN VolunteersDepartments AS vd
+--				 ON v.DepartmentId = vd.Id
+--				 WHERE vd.DepartmentName = @VolunteersDepartment)
+--			 END
 
+ -- 12. Animals with Owner or Not
 
+ CREATE PROCEDURE usp_AnimalsWithOwnersOrNot(@AnimalName VARCHAR(30))
+               AS
+			   BEGIN
+			     IF(SELECT OwnerId FROM Animals WHERE Name LIKE @AnimalName) IS NULL
+				 BEGIN
+				        SELECT Name, 'For adoption' AS OwnerName FROM Animals 
+						WHERE Name LIKE @AnimalName
+				        
+				   END
+				 ELSE
+				 BEGIN
+				      SELECT a.Name, o.Name AS OwnerName FROM Animals AS a
+				      JOIN Owners AS o
+				      ON a.OwnerId = o.Id
+				      WHERE a.Name LIKE @AnimalName
+				 END
+			END
+
+EXEC dbo.usp_AnimalsWithOwnersOrNot 'Hippo'
+				 
+			   
 
 
 
