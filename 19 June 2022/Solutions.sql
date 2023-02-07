@@ -133,6 +133,14 @@ WHERE vc.Id = 2 AND v.Address LIKE '%Sofia%'
 ORDER BY v.Name
 
 
+-- 10.	Animals for Adoption
+
+SELECT a.Name, YEAR(a.BirthDate) AS BirthYear, t.AnimalType FROM Animals AS a
+JOIN AnimalTypes AS t
+ON a.AnimalTypeId = t.Id
+WHERE a.OwnerId IS NULL AND DATEDIFF(year, a.BirthDate, '01/01/22') < 5  AND a.AnimalTypeId NOT LIKE 3
+ORDER BY a.Name
+
 SELECT Address FROM Volunteers
 
 
