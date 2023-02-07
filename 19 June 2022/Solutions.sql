@@ -82,3 +82,30 @@ DELETE FROM Volunteers
 WHERE DepartmentId = 2
 DELETE FROM VolunteersDepartments
 WHERE Id = 2
+
+-- 5. Volunteers
+
+SELECT 
+Name, 
+PhoneNumber, 
+Address, 
+AnimalId, 
+DepartmentId FROM Volunteers 
+ORDER BY Name, AnimalId, DepartmentId
+
+-- 6. Animals data
+
+--Select all animals and their type. Extract name, 
+--animal type and birth date (in format 'dd.MM.yyyy'). 
+--Order the result by animal's name (ascending).
+
+SELECT 
+a.Name, 
+t.AnimalType, 
+FORMAT(a.BirthDate, 'dd.MM.yyyy') AS BirthDate
+FROM Animals AS a
+JOIN AnimalTypes AS t
+ON a.AnimalTypeId = t.Id
+ORDER BY a.Name
+
+
