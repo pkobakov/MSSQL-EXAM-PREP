@@ -74,3 +74,11 @@ SELECT * FROM Owners
 UPDATE Animals
 SET OwnerId = 4
 WHERE OwnerId IS NULL
+
+-- 4.Delete
+
+SELECT * FROM VolunteersDepartments
+DELETE FROM Volunteers
+WHERE DepartmentId = 2
+DELETE FROM VolunteersDepartments
+WHERE Id = 2
