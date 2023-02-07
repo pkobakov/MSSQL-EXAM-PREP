@@ -111,3 +111,20 @@ JOIN Animals AS a
 ON o.Id = a.OwnerId
 GROUP BY o.Name
 ORDER BY COUNT(a.Id) DESC
+
+-- 8. Owners, Animals and Cages
+
+SELECT CONCAT_WS('-', o.Name, a.Name) AS OwnersAnimals, o.PhoneNumber, AC.CageId FROM Owners AS o
+JOIN Animals AS a
+ON o.Id = a.OwnerId
+JOIN AnimalTypes AS t
+ON a.AnimalTypeId = t.Id
+JOIN AnimalsCages AS ac
+ON a.Id = ac.AnimalId
+WHERE t.Id = 1
+ORDER BY o.Name, a.Name DESC
+
+
+
+
+ 
