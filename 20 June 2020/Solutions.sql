@@ -105,3 +105,6 @@ JOIN Hotels AS h
 ON c.Id = h.CityId
 GROUP BY c.Name
 ORDER BY COUNT(h.Id) DESC, c.Name 
+
+
+SELECT * FROM Cities
