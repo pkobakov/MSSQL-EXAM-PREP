@@ -84,3 +84,16 @@ WHERE HotelId IN(5,7,9)
 
 DELETE FROM AccountsTrips
 WHERE AccountId = 47
+
+-- 5. EEE-Mails
+
+SELECT 
+FirstName, 
+LastName, 
+FORMAT(BirthDate, 'MM-dd-yyyy'),
+c.Name AS HomeTown,
+Email FROM Accounts AS a
+JOIN Cities AS c
+ON a.CityId = c.Id
+WHERE Email LIKE 'e%'
+ORDER BY c.Name
