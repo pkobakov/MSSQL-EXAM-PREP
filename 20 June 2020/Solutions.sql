@@ -108,3 +108,4 @@ ORDER BY COUNT(h.Id) DESC, c.Name
 
 
 SELECT * FROM Cities
+

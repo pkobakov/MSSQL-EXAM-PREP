@@ -31,7 +31,6 @@ GO
 
 -- Insert Cities
 SET IDENTITY_INSERT Cities ON;
-
 INSERT INTO Cities (Id, Name, CountryCode) VALUES
 (1, 'Sofia', 'BG'),
 (2, 'Mezdra', 'BG'),
