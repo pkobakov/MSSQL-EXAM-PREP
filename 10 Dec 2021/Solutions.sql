@@ -70,3 +70,8 @@ WHERE p.Id BETWEEN 5 AND 15
 UPDATE AirCraft
 SET Condition = 'A'
 WHERE Condition IN ('C','B') AND FlightHours BETWEEN NULL AND 100 AND YEAR([Year]) >= 2013
+
+-- 4. Delete
+
+DELETE FROM Passengers
+WHERE LEN(FullName) >= 10
