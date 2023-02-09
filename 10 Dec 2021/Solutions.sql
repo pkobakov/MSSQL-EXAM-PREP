@@ -99,3 +99,17 @@ JOIN Airports AS a
 ON fd.AirportId = a.Id
 WHERE DAY(fd.Start)%2 = 0 
 ORDER BY fd.TicketPrice DESC, a.AirportName
+
+-- 8. Number of Flights for Each Aircraft
+
+SELECT 
+a.Id AS AircraftId, 
+a.Manufacturer,
+a.FlightHours,
+COUNT(fd.Id) AS FlightDestinationsCount, 
+ROUND(AVG(fd.TicketPrice),2) AS AvgPrice FROM AirCraft AS a
+JOIN FlightDestinations AS fd
+ON a.Id = fd.AircraftId
+GROUP BY a.Id, a.FlightHours, a.Manufacturer
+HAVING COUNT(fd.Id) >= 2
+ORDER BY COUNT(fd.Id) DESC, a.Id
