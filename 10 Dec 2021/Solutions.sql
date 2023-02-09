@@ -79,3 +79,13 @@ WHERE LEN(FullName) >= 10
 -- 5. Aircraft
 SELECT Manufacturer, Model, FlightHours, Condition FROM AirCraft
 ORDER BY FlightHours DESC
+
+-- 6. Pilots and Aircraft
+
+SELECT p.FirstName, p.LastName, a.Manufacturer, a.Model, a.FlightHours FROM Pilots AS p
+JOIN PilotsAircraft AS pa
+ON p.Id = pa.PilotId
+JOIN AirCraft AS a
+ON pa.AircraftId = a.Id
+WHERE FlightHours < 304
+ORDER BY a.FlightHours DESC, p.FirstName
