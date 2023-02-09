@@ -147,16 +147,51 @@
 
 -- 11.	Find all Destinations by Email Address
 
-CREATE PROCEDURE udf_FlightDestinationsByEmail(@email VARCHAR(50)) 
-              AS 
-			  BEGIN
-			       (
-				    SELECT COUNT(fd.Id) FROM Passengers AS p
-				    JOIN FlightDestinations AS fd
-					ON p.Id = fd.PassengerId
-					WHERE p.Email LIKE @email 
-				   )
+--CREATE PROCEDURE udf_FlightDestinationsByEmail(@email VARCHAR(50)) 
+--              AS 
+--			  BEGIN
+--			       (
+--				    SELECT COUNT(fd.Id) FROM Passengers AS p
+--				    JOIN FlightDestinations AS fd
+--					ON p.Id = fd.PassengerId
+--					WHERE p.Email LIKE @email 
+--				   )
  
+--			  END
+
+--EXEC dbo.udf_FlightDestinationsByEmail 'PierretteDunmuir@gmail.com' 
+
+-- 12.	Full Info for Airports
+
+CREATE PROCEDURE usp_SearchByAirportName (@airportName VARCHAR(70))
+              AS
+			  BEGIN
+			      (
+				   SELECT 
+				   a.AirportName,
+				   p.FullName,
+				   CASE
+				   WHEN fd.TicketPrice <= 400 THEN 'Low'
+				   WHEN fd.TicketPrice BETWEEN 401 AND 1500 THEN 'Medium'
+				   WHEN fd.TicketPrice > 1501 THEN 'High'
+				   END
+				   AS LevelOfTicketPrice,
+				   aa.Manufacturer,
+				   aa.Condition, 
+				   [at].TypeName
+				   FROM Airports AS a
+				   JOIN FlightDestinations AS fd
+				   ON a.Id = fd.AirportId
+				   JOIN Passengers AS p
+				   ON p.Id = fd.PassengerId
+				   JOIN AirCraft AS aa
+				   ON fd.AircraftId = aa.Id
+				   JOIN AircraftTypes AS [at]
+				   ON aa.TypeId = [at].Id
+				   WHERE a.AirportName LIKE 'Sir Seretse Khama International Airport'
+				  )
+				  ORDER BY aa.Manufacturer,  p.FullName
 			  END
 
-EXEC dbo.udf_FlightDestinationsByEmail 'PierretteDunmuir@gmail.com' 
+
+EXEC usp_SearchByAirportName 'Sir Seretse Khama International Airport'
