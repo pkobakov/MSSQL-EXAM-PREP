@@ -113,3 +113,14 @@ ON a.Id = fd.AircraftId
 GROUP BY a.Id, a.FlightHours, a.Manufacturer
 HAVING COUNT(fd.Id) >= 2
 ORDER BY COUNT(fd.Id) DESC, a.Id
+
+-- 9. Regular Passengers
+
+SELECT p.FullName, COUNT(a.Id) AS CountOfAircraft, SUM(fd.TicketPrice)  FROM Passengers AS p
+JOIN FlightDestinations AS fd
+ON p.Id = fd.PassengerId
+JOIN AirCraft AS a 
+ON fd.AircraftId = a.Id
+GROUP BY p.FullName
+HAVING COUNT(a.Id)>1 AND CHARINDEX('a', p.FullName) = 2
+ORDER BY p.FullName
