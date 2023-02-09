@@ -1,3 +1,4 @@
+-- 1. Create Tables
 CREATE TABLE Passengers
 (
  Id INT PRIMARY KEY IDENTITY,
@@ -55,3 +56,11 @@ CREATE TABLE FlightDestinations
  PassengerId INT NOT NULL FOREIGN KEY REFERENCES Passengers(Id),
  TicketPrice DECIMAL(18,2) NOT NULL DEFAULT 15 
 )
+
+-- 2. Insert
+
+INSERT INTO Passengers(Id, FullName, Email)
+SELECT CONCAT_WS(' ', p.FirstName, p.LastName) AS FullName, CONCAT(p.FirstName,p.LastName,'@gmail.com') 
+AS Email 
+FROM Pilots AS p 
+WHERE p.Id BETWEEN 5 AND 15
