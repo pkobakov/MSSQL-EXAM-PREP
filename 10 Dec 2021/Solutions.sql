@@ -89,3 +89,13 @@ JOIN AirCraft AS a
 ON pa.AircraftId = a.Id
 WHERE FlightHours < 304
 ORDER BY a.FlightHours DESC, p.FirstName
+
+-- 7. Top 20 Flight Destinations
+
+SELECT TOP(20) fd.Id, p.FullName ,fd.Start, a.AirportName , fd.TicketPrice  FROM FlightDestinations AS fd
+JOIN Passengers AS p
+ON fd.PassengerId = p.Id
+JOIN Airports AS a
+ON fd.AirportId = a.Id
+WHERE DAY(fd.Start)%2 = 0 
+ORDER BY fd.TicketPrice DESC, a.AirportName
