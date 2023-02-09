@@ -124,3 +124,22 @@ ON fd.AircraftId = a.Id
 GROUP BY p.FullName
 HAVING COUNT(a.Id)>1 AND CHARINDEX('a', p.FullName) = 2
 ORDER BY p.FullName
+
+-- 10. Full Info for Flight Destinations
+
+SELECT 
+a.AirportName, 
+fd.[Start] AS DayTime,
+fd.TicketPrice,
+p.FullName,
+aa.Manufacturer, 
+aa.Model
+FROM Airports AS a
+JOIN FlightDestinations AS fd
+ON a.Id = fd.AirportId
+JOIN Passengers AS p
+ON fd.PassengerId = p.Id
+JOIN AirCraft AS aa
+ON fd.AircraftId = aa.Id
+WHERE DATEPART(hour, fd.Start) BETWEEN '06' AND '20' AND fd.TicketPrice > 2500
+ORDER BY aa.Model
