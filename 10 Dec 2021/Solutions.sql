@@ -75,3 +75,7 @@ WHERE Condition IN ('C','B') AND FlightHours BETWEEN NULL AND 100 AND YEAR([Year
 
 DELETE FROM Passengers
 WHERE LEN(FullName) >= 10
+
+-- 5. Aircraft
+SELECT Manufacturer, Model, FlightHours, Condition FROM AirCraft
+ORDER BY FlightHours DESC
