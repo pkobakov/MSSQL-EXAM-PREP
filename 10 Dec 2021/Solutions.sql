@@ -64,3 +64,9 @@ SELECT CONCAT_WS(' ', p.FirstName, p.LastName) AS FullName, CONCAT(p.FirstName,p
 AS Email 
 FROM Pilots AS p 
 WHERE p.Id BETWEEN 5 AND 15
+
+-- 3. Update
+
+UPDATE AirCraft
+SET Condition = 'A'
+WHERE Condition IN ('C','B') AND FlightHours BETWEEN NULL AND 100 AND YEAR([Year]) >= 2013
