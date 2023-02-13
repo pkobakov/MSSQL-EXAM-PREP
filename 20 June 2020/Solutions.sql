@@ -107,5 +107,21 @@ GROUP BY c.Name
 ORDER BY COUNT(h.Id) DESC, c.Name 
 
 
-SELECT * FROM Cities
+-- 7. Longest and Shortest Trips
+
+SELECT a.Id AS AccounttId, CONCAT_WS(' ', a.FirstName, a.LastName) AS FullName,
+MAX(DATEDIFF(DAY,tr.ArrivalDate, tr.ReturnDate)) AS LongestTrip,
+MIN(DATEDIFF(DAY,tr.ArrivalDate, tr.ReturnDate)) AS ShortestTrip
+FROM Trips AS tr
+JOIN AccountsTrips AS [at]
+ON tr.Id = [at].TripId
+JOIN Accounts AS a
+ON [at].AccountId = a.Id
+WHERE a.MiddleName IS NULL
+GROUP BY a.Id,
+CONCAT_WS(' ', a.FirstName, a.LastName)
+ORDER BY LongestTrip DESC,
+ShortestTrip
+
+
 
