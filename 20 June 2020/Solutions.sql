@@ -123,5 +123,10 @@ CONCAT_WS(' ', a.FirstName, a.LastName)
 ORDER BY LongestTrip DESC,
 ShortestTrip
 
+-- 8. Metropolis
 
-
+SELECT TOP(10) c.Id, c.Name AS City, c.CountryCode AS Country, COUNT(aa.Id) AS Accounts  FROM Cities AS c
+JOIN Accounts AS aa
+ON c.Id = aa.CityId
+GROUP BY c.Id, c.Name,C.CountryCode
+ORDER BY Accounts DESC
