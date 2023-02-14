@@ -178,36 +178,91 @@
 
 -- 11. Avialable Room
 
-CREATE FUNCTION udf_GetAvailableRoom(@HotelId INT, @Date DATE, @People INT)
-RETURNS VARCHAR(MAX)
-			 AS
-			 BEGIN
-			 DECLARE @roomId INT = (SELECT TOP(1) r.Id FROM Trips AS t
-				                        JOIN Rooms AS r
-										ON t.RoomId = r.Id
-				                        JOIN Hotels AS h
-										ON r.HotelId = h.Id
-										WHERE h.Id = @HotelId
-										AND @Date NOT BETWEEN t.ArrivalDate AND t.ReturnDate
-										AND t.CancelDate IS NULL
-										AND r.Beds >= @People
-										AND YEAR(@Date) = YEAR(t.ArrivalDate)
-										ORDER BY r.Price DESC
-										)
+--CREATE FUNCTION udf_GetAvailableRoom(@HotelId INT, @Date DATE, @People INT)
+--RETURNS VARCHAR(MAX)
+--			 AS
+--			 BEGIN
+--			 DECLARE @roomId INT = (SELECT TOP(1) r.Id FROM Trips AS t
+--				                        JOIN Rooms AS r
+--										ON t.RoomId = r.Id
+--				                        JOIN Hotels AS h
+--										ON r.HotelId = h.Id
+--										WHERE h.Id = @HotelId
+--										AND @Date NOT BETWEEN t.ArrivalDate AND t.ReturnDate
+--										AND t.CancelDate IS NULL
+--										AND r.Beds >= @People
+--										AND YEAR(@Date) = YEAR(t.ArrivalDate)
+--										ORDER BY r.Price DESC
+--										)
                
-			  IF (@roomId IS NULL)
-			  RETURN 'No rooms available'
+--			  IF (@roomId IS NULL)
+--			  RETURN 'No rooms available'
 
 			  
-			  DECLARE @Beds INT = (SELECT Beds FROM Rooms WHERE Id = @roomId)
-			  DECLARE @BaseRate DECIMAL(18,2) = (SELECT BaseRate 
-			                                                FROM Hotels 
-															WHERE Id = (SELECT HotelId FROM Rooms
-			                                                            WHERE Id = @roomId)) 
-              DECLARE @RoomPrice DECIMAL (18,2) = (SELECT Price FROM Rooms WHERE Id = @roomId)
-			  DECLARE @RoomType VARCHAR(50) = (SELECT Type FROM Rooms WHERE Id = @roomId)
-			  DECLARE @TotalPrice DECIMAL(18,2) = (@RoomPrice + @BaseRate) * @People
-			  DECLARE @OutPut VARCHAR(MAX) = CONCAT('Room ', @roomId, ': ', @RoomType, ' (', @Beds, ' beds', ') - $', @TotalPrice)
-			  RETURN @OutPut 
-		END
+--			  DECLARE @Beds INT = (SELECT Beds FROM Rooms WHERE Id = @roomId)
+--			  DECLARE @BaseRate DECIMAL(18,2) = (SELECT BaseRate 
+--			                                                FROM Hotels 
+--															WHERE Id = (SELECT HotelId FROM Rooms
+--			                                                            WHERE Id = @roomId)) 
+--              DECLARE @RoomPrice DECIMAL (18,2) = (SELECT Price FROM Rooms WHERE Id = @roomId)
+--			  DECLARE @RoomType VARCHAR(50) = (SELECT Type FROM Rooms WHERE Id = @roomId)
+--			  DECLARE @TotalPrice DECIMAL(18,2) = (@RoomPrice + @BaseRate) * @People
+--			  DECLARE @OutPut VARCHAR(MAX) = CONCAT('Room ', @roomId, ': ', @RoomType, ' (', @Beds, ' beds', ') - $', @TotalPrice)
+--			  RETURN @OutPut 
+--		END
 
+-- 12. Switch Room
+
+CREATE PROCEDURE usp_SwitchRoom(@TripId INT, @TargetRoomId INT)
+AS
+BEGIN 
+							     DECLARE @tripHotelId INT =
+							     (
+								  SELECT h.Id FROM Trips AS t
+								  JOIN Rooms AS r
+								  ON t.RoomId = r.Id
+								  JOIN Hotels AS h
+								  ON r.HotelId = h.Id
+								  WHERE t.Id = @TripId
+								 );
+
+                                 DECLARE @roomHotelId INT = 
+							     (
+							      SELECT HotelId FROM Rooms
+							      WHERE Id = @TargetRoomId
+							     )
+
+
+                               IF(@tripHotelId<>@roomHotelId)
+							   
+							   THROW 50001, 'Target room is in another hotel!',1
+							   
+
+							   DECLARE @CountTripAccounts INT = (
+							                                     SELECT COUNT(AccountId) FROM AccountsTrips
+							                                     WHERE TripId = @TripId
+							                                    )
+	    					   DECLARE @RoomBeds INT = (
+							                            SELECT Beds FROM Rooms
+													    WHERE Id = @TargetRoomId
+							                           )
+                              IF(@CountTripAccounts>@RoomBeds)
+							  
+							  THROW 50002, 'Not enough beds in target room!', 1							
+							 
+
+					         UPDATE Trips
+					         SET RoomId = @TargetRoomId WHERE 
+							 Id = @TripId
+							 
+END
+
+
+
+EXEC usp_SwitchRoom 10, 11
+SELECT RoomId FROM Trips WHERE Id = 10
+
+
+EXEC usp_SwitchRoom 10, 7
+
+EXEC usp_SwitchRoom 10, 8
