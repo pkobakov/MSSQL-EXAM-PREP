@@ -70,3 +70,15 @@ INSERT INTO Issues (Title, IssueStatus, RepositoryId, AssigneeId) VALUES
 UPDATE Issues
 SET IssueStatus = 'closed'
 WHERE AssigneeId LIKE 6
+
+-- 4. Delete
+
+DELETE FROM RepositoriesContributors
+WHERE RepositoryId = 
+(SELECT Id FROM Repositories
+ WHERE Name LIKE 'Softuni-Teamwork' )
+
+DELETE FROM Issues WHERE RepositoryId = 
+(SELECT Id FROM Repositories
+ WHERE Name LIKE 'Softuni-Teamwork' )
+
