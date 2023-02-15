@@ -117,3 +117,26 @@ RIGHT JOIN Files AS pf
 ON f.ParentId = pf.Id
 WHERE f.ParentId IS NULL
 ORDER BY pf.Id, pf.Name, pf.Size DESC
+
+-- 9. Commits and Repositories
+
+SELECT TOP(5) r.Id, r.Name, COUNT(c.Id) AS Commits 
+FROM Commits AS c
+JOIN Repositories AS r
+ON c.RepositoryId = r.Id
+JOIN RepositoriesContributors AS rc
+ON r.Id = rc.RepositoryId
+GROUP BY r.Id,r.Name
+ORDER BY Commits DESC, r.Id, r.Name
+
+-- 10. Average Size 
+
+SELECT u.Username, AVG(f.Size) AS Size FROM Users AS u
+JOIN Commits AS c
+ON u.Id = c.ContributorId
+JOIN Files AS f
+ON c.Id = f.CommitId
+WHERE c.Id IS NOT NULL
+GROUP BY u.Username
+ORDER BY Size DESC, u.Username
+
