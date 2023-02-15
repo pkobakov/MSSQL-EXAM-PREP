@@ -128,3 +128,42 @@ LEFT JOIN Users AS u
 ON r.UserId = u.Id
 GROUP BY e.Firstname, e.Lastname
 ORDER BY UsersCount DESC, FullName
+
+-- 10. Full Info
+
+
+
+SELECT
+CASE
+WHEN COALESCE(e.FirstName, e.LastName) IS NULL THEN 'None'
+ELSE
+CONCAT_WS(' ',e.Firstname, e.Lastname) END AS Employee, 
+ISNULL(d.Name, 'None') AS Department,
+ISNULL(c.Name, 'None') AS Category,
+ISNULL(r.[Description], 'None') AS [Description],
+ISNULL(FORMAT(r.OpenDate, 'dd.MM.yyyy'), 'None') AS OpenDate, 
+ISNULL(s.Label, 'None') AS Status,
+ISNULL(u.[Name], 'None') AS [User]
+FROM Reports AS r
+LEFT JOIN Employees AS e
+ON r.EmployeeId = e.Id
+LEFT JOIN Departments AS d
+ON e.DepartmentId = d.Id
+LEFT JOIN Categories AS c
+ON c.Id = r.CategoryId
+LEFT JOIN Status AS s
+ON r.StatusId = s.Id
+LEFT JOIN Users AS u
+ON r.UserId = u.Id
+
+
+ORDER BY 
+e.Firstname DESC, 
+e.Lastname DESC, 
+d.Name, 
+c.Name, 
+r.Description, 
+r.OpenDate, 
+s.Label, 
+u.Name
+
