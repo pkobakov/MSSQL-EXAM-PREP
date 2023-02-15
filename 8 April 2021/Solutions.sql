@@ -71,3 +71,9 @@ VALUES
 (6, 3, '2015-09-05', '2015-12-06', 'Charity trail running', 3, 5),
 (14, 2, '2015-09-07', NULL, 'Falling bricks on Str.58', 5, 2),
 (4, 3, '2017-07-03', '2017-07-06', 'Cut off streetlight on Str.11', 1, 1)
+
+-- 3. Update
+
+UPDATE Reports
+SET CloseDate = GETDATE()
+WHERE  CloseDate IS NULL
