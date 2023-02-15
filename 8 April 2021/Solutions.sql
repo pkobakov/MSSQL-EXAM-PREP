@@ -77,3 +77,8 @@ VALUES
 UPDATE Reports
 SET CloseDate = GETDATE()
 WHERE  CloseDate IS NULL
+
+-- 4. Delete
+
+DELETE FROM Reports
+WHERE StatusId = 4
