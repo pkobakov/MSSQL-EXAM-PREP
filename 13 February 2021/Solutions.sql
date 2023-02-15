@@ -159,3 +159,15 @@ RETURNS INT
        END
 
 SELECT dbo.udf_AllUserCommits('UnderSinduxrein')
+
+-- 12. Search for Files
+
+CREATE PROCEDURE usp_SearchForFiles(@fileExtension VARCHAR(20))
+              AS
+			  BEGIN
+			       SELECT Id, Name, CONCAT(Size, 'KB') AS Size FROM Files
+				   WHERE Name LIKE CONCAT('%',@fileExtension,'%')
+				   ORDER BY Id, Name, Size DESC
+			  END
+
+EXEC usp_SearchForFiles 'txt'
