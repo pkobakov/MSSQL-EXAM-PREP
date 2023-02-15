@@ -116,3 +116,15 @@ JOIN Categories AS c
 ON r.CategoryId = c.Id
 WHERE DAY(r.OpenDate) LIKE DAY(u.Birthdate)
 ORDER BY u.Username, c.Name
+
+-- 9. Users per Employee 
+
+SELECT CONCAT_WS(' ', e.Firstname, e.Lastname) AS FullName,
+COUNT(DISTINCT(u.Username)) AS UsersCount 
+FROM Employees AS e
+LEFT JOIN Reports AS r
+ON e.Id = r.EmployeeId
+LEFT JOIN Users AS u
+ON r.UserId = u.Id
+GROUP BY e.Firstname, e.Lastname
+ORDER BY UsersCount DESC, FullName
