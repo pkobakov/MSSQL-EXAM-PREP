@@ -89,3 +89,11 @@ SELECT Description, FORMAT(r.OpenDate, 'dd-MM-yyyy') AS OpenDate
 FROM Reports AS r
 WHERE EmployeeId IS NULL
 ORDER BY r.OpenDate, Description
+
+-- 6. Reports & Categories
+
+SELECT r.Description, c.Name  FROM Reports AS r
+JOIN Categories AS c
+ON r.CategoryId = c.Id
+WHERE CategoryId IS NOT NULL
+ORDER BY Description, c.Name
