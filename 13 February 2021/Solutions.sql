@@ -108,3 +108,12 @@ JOIN Users AS u
 ON i.AssigneeId = u.Id
 GROUP BY i.Id, i.Title, i.AssigneeId, u.Username
 ORDER BY i.Id DESC, i.AssigneeId
+
+
+-- 8. Single Files
+
+SELECT pf.Id, pf.Name, CONCAT(pf.Size, 'KB') FROM Files AS f
+RIGHT JOIN Files AS pf
+ON f.ParentId = pf.Id
+WHERE f.ParentId IS NULL
+ORDER BY pf.Id, pf.Name, pf.Size DESC
