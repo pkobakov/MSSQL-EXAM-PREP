@@ -175,6 +175,34 @@ CREATE FUNCTION udf_HoursToComplete(@StartDate DATETIME, @EndDate DATETIME)
 			     DECLARE @totalHours INT = ISNULL(DATEDIFF(HOUR, @StartDate, @EndDate), 0)
                  RETURN @totalHours 
 			   END
+
+-- Example
+
 SELECT dbo.udf_HoursToComplete(OpenDate, CloseDate) AS TotalHours FROM Reports
 
- 
+
+-- 12.	Assign Employee
+
+CREATE PROCEDURE usp_AssignEmployeeToReport(@EmployeeId INT, @ReportId INT) 
+              AS
+            BEGIN
+                  DECLARE @employeeDepartmentId INT = (SELECT DepartmentId FROM Employees WHERE Id LIKE @EmployeeId)
+
+                  DECLARE @categoryDepartmentId INT = (SELECT d.Id AS CategoryDepartmentId FROM Reports AS r 
+                                    JOIN Categories AS c
+                                    ON r.CategoryId = c.Id
+                                    JOIN Departments AS d
+                                    ON c.DepartmentId = d.Id
+									WHERE r.Id LIKE @ReportId)
+
+                            IF(@employeeDepartmentId<>@categoryDepartmentId)
+                            THROW 500001, 'Employee doesn''t belong to the appropriate department!', 1
+
+                             UPDATE Reports
+                                 SET EmployeeId = @EmployeeId
+                               WHERE Id LIKE @ReportId
+                END
+
+EXEC usp_AssignEmployeeToReport 30, 1
+
+EXEC usp_AssignEmployeeToReport 17, 2
