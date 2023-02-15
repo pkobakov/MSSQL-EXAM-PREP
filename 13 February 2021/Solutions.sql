@@ -140,3 +140,22 @@ WHERE c.Id IS NOT NULL
 GROUP BY u.Username
 ORDER BY Size DESC, u.Username
 
+
+-- 11. All User Commits
+
+CREATE FUNCTION udf_AllUserCommits(@username VARCHAR(30))
+RETURNS INT 
+         AS 
+      BEGIN
+          DECLARE @Commits INT = (
+                                   SELECT COUNT(c.Id) FROM Users AS u
+								   JOIN Commits AS c
+								   ON u.Id = c.ContributorId
+								   WHERE u.Username = @username
+                                 )
+
+								 RETURN @Commits
+
+       END
+
+SELECT dbo.udf_AllUserCommits('UnderSinduxrein')
