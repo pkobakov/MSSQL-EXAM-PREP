@@ -131,8 +131,6 @@ ORDER BY UsersCount DESC, FullName
 
 -- 10. Full Info
 
-
-
 SELECT
 CASE
 WHEN COALESCE(e.FirstName, e.LastName) IS NULL THEN 'None'
@@ -150,7 +148,7 @@ ON r.EmployeeId = e.Id
 LEFT JOIN Departments AS d
 ON e.DepartmentId = d.Id
 LEFT JOIN Categories AS c
-ON c.Id = r.CategoryId
+ON  r.CategoryId = c.Id 
 LEFT JOIN Status AS s
 ON r.StatusId = s.Id
 LEFT JOIN Users AS u
@@ -167,3 +165,16 @@ r.OpenDate,
 s.Label, 
 u.Name
 
+
+-- 11. Hours to Complete
+
+CREATE FUNCTION udf_HoursToComplete(@StartDate DATETIME, @EndDate DATETIME) 
+       RETURNS INT
+	            AS
+		     BEGIN
+			     DECLARE @totalHours INT = ISNULL(DATEDIFF(HOUR, @StartDate, @EndDate), 0)
+                 RETURN @totalHours 
+			   END
+SELECT dbo.udf_HoursToComplete(OpenDate, CloseDate) AS TotalHours FROM Reports
+
+ 
