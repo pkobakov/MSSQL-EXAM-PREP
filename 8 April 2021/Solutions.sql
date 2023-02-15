@@ -97,3 +97,12 @@ JOIN Categories AS c
 ON r.CategoryId = c.Id
 WHERE CategoryId IS NOT NULL
 ORDER BY Description, c.Name
+
+-- 7. Most Reported Category
+
+SELECT TOP(5) c.[Name] AS CategoryName, COUNT(r.Id) AS ReportsNumber 
+FROM Categories AS c
+JOIN Reports AS r
+ON c.Id = r.CategoryId
+GROUP BY c.[Name]
+ORDER BY ReportsNumber DESC, CategoryName
