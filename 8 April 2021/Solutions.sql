@@ -106,3 +106,13 @@ JOIN Reports AS r
 ON c.Id = r.CategoryId
 GROUP BY c.[Name]
 ORDER BY ReportsNumber DESC, CategoryName
+
+-- 8. Birthday Report
+
+SELECT u.Username,c.Name AS CategoryName FROM Reports AS r
+JOIN Users AS u
+ON r.UserId = u.Id
+JOIN Categories AS c
+ON r.CategoryId = c.Id
+WHERE DAY(r.OpenDate) LIKE DAY(u.Birthdate)
+ORDER BY u.Username, c.Name
