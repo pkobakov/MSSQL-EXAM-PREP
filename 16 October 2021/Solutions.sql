@@ -83,3 +83,9 @@ WHERE  TastId = 1
 UPDATE Brands
 SET BrandDescription = 'New description'
 WHERE BrandDescription IS NULL
+
+-- 4. Delete
+DELETE FROM ClientsCigars
+DELETE FROM Clients
+DELETE FROM Addresses
+WHERE Country LIKE 'C%'
