@@ -168,4 +168,21 @@ GROUP BY cl.LastName
 ORDER BY AVG(s.Length) DESC
 
 
+-- 11. Client with Cigars
+
+CREATE FUNCTION udf_ClientWithCigars(@name VARCHAR(30)) 
+            RETURNS INT
+			AS 
+			BEGIN
+			   RETURN 
+			          (
+					    SELECT COUNT(cg.Id) FROM Clients AS cl
+						JOIN ClientsCigars AS cc
+						ON cl.Id = cc.ClientId
+						JOIN Cigars AS cg
+						ON cc.CigarId = cg.Id
+						WHERE cl.FirstName LIKE @name
+			          )
+			END
+
 
