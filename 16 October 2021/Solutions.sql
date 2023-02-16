@@ -131,3 +131,22 @@ ORDER BY c.CigarName,
 c.PriceForSingleCigar DESC
 
 
+-- 9. Clients with ZIP Codes
+
+SELECT 
+CONCAT_WS(' ', cl.FirstName, cl.LastName) AS FullName, 
+a.Country, 
+a.ZIP, 
+CONCAT('$',MAX(cg.PriceForSingleCigar)) AS CigarPrice
+FROM Addresses AS a
+JOIN Clients AS cl
+ON a.Id = cl.AddressId
+JOIN ClientsCigars AS cc
+ON cl.Id = cc.ClientId
+JOIN Cigars AS cg
+ON cc.CigarId = cg.Id
+WHERE ISNUMERIC(ZIP) = 1 
+GROUP BY CONCAT_WS(' ', cl.FirstName, cl.LastName), a.Country, a.ZIP
+ORDER BY FullName
+
+
