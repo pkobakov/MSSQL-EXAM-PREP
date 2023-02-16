@@ -186,3 +186,25 @@ CREATE FUNCTION udf_ClientWithCigars(@name VARCHAR(30))
 			END
 
 
+
+-- 12. Search for Cigar with Spicific Taste
+
+CREATE PROCEDURE usp_SearchByTaste(@taste VARCHAR(20))
+              AS
+			  BEGIN
+			       SELECT c.CigarName, 
+				   CONCAT('$',c.PriceForSingleCigar) AS Price,
+				   t.TasteType,
+				   b.BrandName, 
+				   CONCAT_WS(' ', s.Length, 'cm') AS CigarLenght,
+				   CONCAT_WS(' ',s.RingRange, 'cm') AS CigarRingRange
+				   FROM Cigars AS c
+				   JOIN Tastes AS t
+				   ON c.TastId = t.Id
+				   JOIN Sizes AS s
+				   ON c.SizeId = s.Id
+				   JOIN Brands AS b
+				   ON c.BrandId = b.Id
+				   WHERE t.TasteType LIKE @taste
+				   ORDER BY CigarLenght, CigarRingRange DESC
+			  END
