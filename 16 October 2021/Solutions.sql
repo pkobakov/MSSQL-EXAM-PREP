@@ -85,7 +85,14 @@ SET BrandDescription = 'New description'
 WHERE BrandDescription IS NULL
 
 -- 4. Delete
+
 DELETE FROM ClientsCigars
 DELETE FROM Clients
 DELETE FROM Addresses
 WHERE Country LIKE 'C%'
+
+
+-- 5. Cigars by Price
+
+SELECT CigarName, PriceForSingleCigar, ImageURL FROM Cigars
+ORDER BY PriceForSingleCigar, CigarName DESC
