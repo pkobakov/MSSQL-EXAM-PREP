@@ -105,3 +105,15 @@ ON c.TastId = t.Id
 WHERE t.TasteType IN('Earthy', 'Woody')
 ORDER BY c.PriceForSingleCigar DESC
 
+
+-- 7. Clients without Cigars
+
+SELECT c.Id, CONCAT_WS(' ', c.FirstName, c.LastName) AS ClientName, c.Email FROM Clients AS c
+LEFT JOIN ClientsCigars AS cc
+ON c.Id = cc.ClientId
+LEFT JOIN Cigars AS cig
+ON cc.CigarId = cig.Id
+WHERE cig.Id IS NULL
+ORDER BY c.FirstName
+
+
