@@ -150,3 +150,22 @@ GROUP BY CONCAT_WS(' ', cl.FirstName, cl.LastName), a.Country, a.ZIP
 ORDER BY FullName
 
 
+-- 10. Cigars by Size
+
+SELECT 
+cl.LastName, 
+AVG(s.Length) AS CigarLength, 
+CEILING(AVG(s.RingRange)) AS CigarRingRange
+FROM Clients AS cl
+JOIN ClientsCigars AS cc
+ON cl.Id = cc.ClientId
+JOIN Cigars AS cg
+ON cc.CigarId = cg.Id
+JOIN Sizes AS s
+ON cg.SizeId = s.Id
+WHERE cc.CigarId IS NOT NULL
+GROUP BY cl.LastName
+ORDER BY AVG(s.Length) DESC
+
+
+
