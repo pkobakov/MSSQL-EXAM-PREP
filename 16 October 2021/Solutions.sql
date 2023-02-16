@@ -187,7 +187,7 @@ CREATE FUNCTION udf_ClientWithCigars(@name VARCHAR(30))
 
 
 
--- 12. Search for Cigar with Spicific Taste
+-- 12. Search for Cigar with Specific Taste
 
 CREATE PROCEDURE usp_SearchByTaste(@taste VARCHAR(20))
               AS
