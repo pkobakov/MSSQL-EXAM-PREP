@@ -203,6 +203,8 @@ CREATE PROCEDURE usp_AssignEmployeeToReport(@EmployeeId INT, @ReportId INT)
                                WHERE Id LIKE @ReportId
                 END
 
+-- Example
+
 EXEC usp_AssignEmployeeToReport 30, 1
 
 EXEC usp_AssignEmployeeToReport 17, 2
