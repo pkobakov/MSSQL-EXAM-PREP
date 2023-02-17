@@ -103,3 +103,18 @@ WHERE CustomerId = 14 OR ProductId = 5
 
 SELECT [Name], Price, Description FROM Products
 ORDER BY Price DESC,Name
+
+-- 6. Negative Feedback
+
+SELECT 
+ProductId, 
+Rate,
+Description, 
+CustomerId, 
+Age, 
+Gender
+FROM Feedbacks AS f
+JOIN Customers AS c
+ON f.CustomerId = c.Id
+WHERE Rate < 5.0
+ORDER BY ProductId DESC, Rate
