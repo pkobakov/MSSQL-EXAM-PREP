@@ -192,3 +192,18 @@ q.DistributorName
 WHERE q.Ranking = 1
 ORDER BY q.CountryName, q.DistributorName
 
+-- 11. Customers with Countries
+
+CREATE VIEW v_UserWithCountries AS
+SELECT 
+CONCAT_WS(' ', c.FirstName, c.LastName) AS CustomerName,
+c.Age,
+c.Gender,
+co.Name
+FROM Customers AS c
+JOIN Countries AS co
+ON c.CountryId = co.Id
+
+SELECT TOP 5 *
+  FROM v_UserWithCountries
+ ORDER BY Age
