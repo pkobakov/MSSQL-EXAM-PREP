@@ -130,3 +130,15 @@ LEFT JOIN Feedbacks AS f
 ON c.Id = f.CustomerId
 WHERE f.Id IS NULL
 ORDER BY CustomerId
+
+-- 8. Customers by Criteria
+
+SELECT cus.FirstName,
+cus.Age, 
+cus.PhoneNumber 
+FROM Customers AS cus
+JOIN Countries AS con
+ON cus.CountryId = con.Id
+WHERE (cus.Age >= 21 AND cus.FirstName LIKE '%an%') OR
+(cus.PhoneNumber LIKE '%38' AND con.Name <>'Greece')
+ORDER BY cus.FirstName, cus.Age DESC
