@@ -171,4 +171,24 @@ d.Name,
 i.Name, 
 p.Name
 
+-- 10. Country Representative
+
+SELECT 
+q.CountryName, 
+q.DistributorName
+             FROM
+                (
+                 SELECT 
+                 co.Name AS CountryName,
+                  d.Name AS DistributorName,
+                 DENSE_RANK() OVER(PARTITION BY co.Name ORDER BY COUNT(i.Id) DESC) AS Ranking
+                 FROM Countries AS co
+                 JOIN Distributors AS d
+                 ON co.Id = d.CountryId
+                 LEFT JOIN Ingredients AS i
+                 ON d.Id = i.DistributorId
+                 GROUP BY co.Name, d.Name
+		       ) AS q
+WHERE q.Ranking = 1
+ORDER BY q.CountryName, q.DistributorName
 
