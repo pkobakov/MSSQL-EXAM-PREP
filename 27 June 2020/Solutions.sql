@@ -102,3 +102,12 @@ WHERE LastName LIKE 'Har%'
 UPDATE Jobs
 SET MechanicId = 3, Status = 'In Progress'
 WHERE Status LIKE 'Pending'
+
+-- 4. Delete
+
+DELETE FROM OrderParts
+WHERE OrderId LIKE 19
+
+DELETE FROM Orders
+WHERE OrderId LIKE 19
+
