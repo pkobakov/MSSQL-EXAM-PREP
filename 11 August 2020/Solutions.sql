@@ -98,3 +98,8 @@ WHERE OriginCountryId = 8
 
 DELETE FROM Feedbacks
 WHERE CustomerId = 14 OR ProductId = 5
+
+-- 5. Products by Price
+
+SELECT [Name], Price, Description FROM Products
+ORDER BY Price DESC,Name
