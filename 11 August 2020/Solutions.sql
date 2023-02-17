@@ -83,3 +83,13 @@ VALUES
 ('Queenie', 'Kramarczyk', 30, 'F', '0064215793', 29),
 ('Hiu', 'Portaro', 25, 'M', '0068277755', 16),
 ('Josefa', 'Opitz', 43, 'F', '0197887645', 17)
+
+-- 3. Update
+
+UPDATE Ingredients
+SET DistributorId = 35
+WHERE [Name] IN ('Bay Leaf', 'Paprika', 'Poppy')
+
+UPDATE Ingredients
+SET OriginCountryId = 14
+WHERE OriginCountryId = 8
