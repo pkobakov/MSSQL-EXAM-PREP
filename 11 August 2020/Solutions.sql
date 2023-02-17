@@ -207,3 +207,24 @@ ON c.CountryId = co.Id
 SELECT TOP 5 *
   FROM v_UserWithCountries
  ORDER BY Age
+
+ -- 12.	Delete Products
+
+CREATE TRIGGER dbo.ProductsToDelete
+    ON Products
+    INSTEAD OF DELETE
+                   AS
+                 BEGIN
+               DECLARE @deletedProductId INT = (SELECT p.Id
+                                                  FROM Products AS p
+                                                  JOIN deleted as d on d.Id = p.Id)
+    DELETE FROM ProductsIngredients
+    WHERE ProductId = @deletedProductId
+
+    DELETE FROM Feedbacks
+    WHERE ProductId = @deletedProductId
+
+    DELETE FROM Products
+    WHERE Id = @deletedProductId
+    
+ END
