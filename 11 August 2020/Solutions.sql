@@ -118,3 +118,15 @@ JOIN Customers AS c
 ON f.CustomerId = c.Id
 WHERE Rate < 5.0
 ORDER BY ProductId DESC, Rate
+
+-- 7. Customers without Feedback
+
+SELECT
+CONCAT_WS(' ',c.FirstName, c.LastName) AS CustomerName,
+c.PhoneNumber,
+c.Gender 
+FROM Customers AS c
+LEFT JOIN Feedbacks AS f
+ON c.Id = f.CustomerId
+WHERE f.Id IS NULL
+ORDER BY CustomerId
