@@ -93,3 +93,8 @@ WHERE [Name] IN ('Bay Leaf', 'Paprika', 'Poppy')
 UPDATE Ingredients
 SET OriginCountryId = 14
 WHERE OriginCountryId = 8
+
+-- 4. Delete 
+
+DELETE FROM Feedbacks
+WHERE CustomerId = 14 OR ProductId = 5
