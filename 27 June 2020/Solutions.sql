@@ -30,7 +30,7 @@ CREATE TABLE Jobs
  ModelId INT NOT NULL FOREIGN KEY REFERENCES Models(ModelId),
  [Status] NVARCHAR(11) NOT NULL CHECK([Status] IN('Pending', 'In Progress', 'Finished')) DEFAULT 'Pending',
  ClientId INT  NOT NULL FOREIGN KEY REFERENCES Clients(ClientId),
- MechanicId INT NOT NULL FOREIGN KEY REFERENCES Mechanics(MechanicId),
+ MechanicId INT FOREIGN KEY REFERENCES Mechanics(MechanicId),
  IssueDate DATE NOT NULL,
  FinishDate DATE 
 )
@@ -56,7 +56,7 @@ CREATE TABLE Orders
   Description NVARCHAR(255),
   Price DECIMAL (18,2) NOT NULL CHECK(Price > 0) DEFAULT 0,
   VendorId INT NOT NULL FOREIGN KEY REFERENCES Vendors(VendorId),
-  StockQty INT NOT NULL CHECK(StockQty > 0) DEFAULT 0
+  StockQty INT NOT NULL CHECK(StockQty >= 0) DEFAULT 0
  )
 
  CREATE TABLE OrderParts 
@@ -72,7 +72,7 @@ CREATE TABLE Orders
   JobId INT NOT NULL FOREIGN KEY REFERENCES Jobs(JobId), 
   PartId INT NOT NULL FOREIGN KEY REFERENCES Parts(PartId),
   Quantity INT NOT NULL CHECK(Quantity > 0) DEFAULT 1,
-  PRIMARY KEY (JobId ,partId)
+  PRIMARY KEY (JobId ,PartId)
  )
 
  -- 2. Insert
