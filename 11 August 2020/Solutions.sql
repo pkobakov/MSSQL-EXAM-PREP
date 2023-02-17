@@ -142,3 +142,33 @@ ON cus.CountryId = con.Id
 WHERE (cus.Age >= 21 AND cus.FirstName LIKE '%an%') OR
 (cus.PhoneNumber LIKE '%38' AND con.Name <>'Greece')
 ORDER BY cus.FirstName, cus.Age DESC
+
+-- 9. Middle Range Distributors
+
+SELECT 
+d.Name AS DistributorName,
+i.Name AS IngredientName, 
+p.Name AS ProductName,
+AVG(f.Rate) AS AverageRate
+FROM Distributors AS d
+JOIN Ingredients AS i
+ON d.Id = i.DistributorId
+JOIN ProductsIngredients AS [ip]
+ON i.Id = [ip].IngredientId
+JOIN Products AS p
+ON [ip].ProductId = p.Id
+JOIN Feedbacks AS f
+ON p.Id = f.ProductId
+
+GROUP BY 
+d.Name,
+i.Name, 
+p.Name
+
+HAVING AVG(f.Rate) BETWEEN 5 AND 8
+ORDER BY 
+d.Name,
+i.Name, 
+p.Name
+
+
