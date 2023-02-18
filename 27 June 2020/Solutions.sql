@@ -137,3 +137,14 @@ JOIN Jobs AS j
 ON c.ClientId = j.ClientId
 WHERE j.Status <> 'Finished'
 ORDER BY [Days going] DESC, c.ClientId
+
+-- 7. Mechanic Performance
+
+SELECT
+CONCAT_WS(' ', m.FirstName, m.LastName) AS Mechanic,
+AVG(DATEDIFF(DAY, j.IssueDate, j.FinishDate)) AS [Average daays]
+FROM Mechanics AS m
+JOIN Jobs AS j
+ON m.MechanicId = j.MechanicId
+GROUP BY m.MechanicId, m.FirstName, m.LastName
+ORDER BY m.MechanicId
