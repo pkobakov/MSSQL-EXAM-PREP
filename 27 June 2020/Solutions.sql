@@ -111,3 +111,17 @@ WHERE OrderId LIKE 19
 DELETE FROM Orders
 WHERE OrderId LIKE 19
 
+
+-- 5. Mechanics Assignments
+
+SELECT
+CONCAT_WS(' ', m.FirstName, m.LastName) AS Mechanic,
+j.Status,
+j.IssueDate
+FROM Mechanics AS m
+JOIN Jobs AS j
+ON m.MechanicId = j.MechanicId
+ORDER BY 
+m.MechanicId, 
+j.IssueDate,
+j.JobId
