@@ -148,3 +148,20 @@ JOIN Jobs AS j
 ON m.MechanicId = j.MechanicId
 GROUP BY m.MechanicId, m.FirstName, m.LastName
 ORDER BY m.MechanicId
+
+
+-- 8. Available Mechanics
+
+SELECT 
+CONCAT_WS(' ', m.FirstName, m.LastName) AS Available
+FROM Mechanics AS m
+LEFT JOIN Jobs AS j
+ON m.MechanicId = J.MechanicId
+WHERE (
+       SELECT COUNT(JobId) FROM Jobs
+	   WHERE Status <> 'Finished' 
+	   AND m.MechanicId = MechanicId
+	   GROUP BY  MechanicId, Status
+      ) IS NULL OR j.JobId IS NULL
+GROUP BY m.MechanicId, m.FirstName, m.LastName
+ORDER BY m.MechanicId
