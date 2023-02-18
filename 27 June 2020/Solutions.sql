@@ -282,56 +282,81 @@
 
 -- 11. Place Order
 
-CREATE PROCEDURE usp_PlaceOrder (@jobId INT, @serialNumber NVARCHAR(50), @quantity INT)
-              AS 
-			  BEGIN
+--CREATE PROCEDURE usp_PlaceOrder (@jobId INT, @serialNumber NVARCHAR(50), @quantity INT)
+--              AS 
+--			  BEGIN
 
-			     IF((SELECT Status FROM Jobs WHERE JobId LIKE @jobId) = 'Finished')
-				 THROW 50011, 'This job is not active!', 1
+--			     IF((SELECT Status FROM Jobs WHERE JobId LIKE @jobId) = 'Finished')
+--				 THROW 50011, 'This job is not active!', 1
 				 
-				 IF((SELECT StockQty FROM Parts WHERE SerialNumber LIKE @serialNumber) < 0)
-				 THROW 50012, 'Part quantity must be more than zero!', 1
+--				 IF((SELECT StockQty FROM Parts WHERE SerialNumber LIKE @serialNumber) < 0)
+--				 THROW 50012, 'Part quantity must be more than zero!', 1
 			     
-				 IF ((SELECT JobId FROM Jobs WHERE JobId LIKE @jobId) IS NULL)
-				 THROW 50013, 'Job not found!', 1
+--				 IF ((SELECT JobId FROM Jobs WHERE JobId LIKE @jobId) IS NULL)
+--				 THROW 50013, 'Job not found!', 1
 
-				 IF ((SELECT PartId FROM Parts WHERE SerialNumber LIKE @serialNumber ) IS NULL)
-			     THROW 50014, 'Part not found', 1
+--				 IF ((SELECT PartId FROM Parts WHERE SerialNumber LIKE @serialNumber ) IS NULL)
+--			     THROW 50014, 'Part not found', 1
 
 
-				 IF((SELECT OrderId FROM Orders WHERE JobId LIKE @jobId AND IssueDate IS NULL) IS NULL)
-				 INSERT INTO Orders (JobId,IssueDate, Delivered) VALUES
-				 (@jobId, NULL, 0)
+--				 IF((SELECT OrderId FROM Orders WHERE JobId LIKE @jobId AND IssueDate IS NULL) IS NULL)
+--				 INSERT INTO Orders (JobId,IssueDate, Delivered) VALUES
+--				 (@jobId, NULL, 0)
 
-				 DECLARE @partId INT = (
-                    				    SELECT PartId FROM Parts
-										WHERE SerialNumber LIKE @serialNumber 
-				                       )
+--				 DECLARE @partId INT = (
+--                    				    SELECT PartId FROM Parts
+--										WHERE SerialNumber LIKE @serialNumber 
+--				                       )
 
-				 DECLARE @orderId INT = ( 
-				                         SELECT OrderId FROM Orders
-				                         WHERE JobId = @jobId AND IssueDate IS NULL
-										)
+--				 DECLARE @orderId INT = ( 
+--				                         SELECT OrderId FROM Orders
+--				                         WHERE JobId = @jobId AND IssueDate IS NULL
+--										)
                  
-				 DECLARE @orderPartsQuantity INT =
-				                             (
-											  SELECT Quantity  FROM OrderParts
-                                              WHERE OrderId = @orderId  
-											  AND PartId = @partId
-											 )
+--				 DECLARE @orderPartsQuantity INT =
+--				                             (
+--											  SELECT Quantity  FROM OrderParts
+--                                              WHERE OrderId = @orderId  
+--											  AND PartId = @partId
+--											 )
                
-			     IF(@orderPartsQuantity IS NULL)
-				 INSERT INTO OrderParts (OrderId, PartId, Quantity) VALUES
-				 (@orderId, @partId, @quantity)
+--			     IF(@orderPartsQuantity IS NULL)
+--				 INSERT INTO OrderParts (OrderId, PartId, Quantity) VALUES
+--				 (@orderId, @partId, @quantity)
 
-				 ELSE 
-				 UPDATE OrderParts
-				 SET Quantity +=@quantity
-				 WHERE OrderId = @orderId AND PartId = @partId
+--				 ELSE 
+--				 UPDATE OrderParts
+--				 SET Quantity +=@quantity
+--				 WHERE OrderId = @orderId AND PartId = @partId
 
 
 			      
-			  END
+--			  END
+
+-- 12. Cost of Order
+
+CREATE FUNCTION udf_GetCost (@jobId INT)
+         RETURNS DECIMAL(18,2)
+		          AS
+				  BEGIN
+				       DECLARE @result DECIMAL(18,2) = (
+					                                     SELECT SUM(op.Quantity * p.Price) 
+														 FROM Jobs AS j
+														 JOIN Orders AS o ON j.JobId = o.JobId
+														 JOIN OrderParts AS op ON o.OrderId = op.OrderId
+														 JOIN Parts AS p ON op.PartId = p.PartId
+														 WHERE j.JobId LIKE @jobId
+														 GROUP BY j.JobId
+					                                   )
+                       
+						
+						IF(@result IS NULL)	
+						SET @result = 0	
+
+					    RETURN @result
+
+				  END
+
 
 
 
